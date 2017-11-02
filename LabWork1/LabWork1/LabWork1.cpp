@@ -37,7 +37,6 @@ Answer binSearch(Parabola parabola, Interval interval, double epsilon) {
 
 	do {
 		calculated = calcFunc(parabola, center);
-		cout << fabs(calcFunc(parabola, center)) << "\n";
 		if (calcFunc(parabola, border1)*calcFunc(parabola, center) > 0) {
 			border1 = center;
 		}
@@ -164,6 +163,7 @@ void showResult(Answer answer) {
 int main() {
 	string choice;
 	int option;
+	double epsilon;
 	
 	hello();
 	
@@ -184,7 +184,7 @@ int main() {
 				cout << "There isn't root in the interval!" << endl;
 				break;
 			}
-			double epsilon = setEpsilon();
+			epsilon = setEpsilon();
 		
 
 			Answer answer = binSearch(parabola, interval, epsilon);
