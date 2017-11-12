@@ -1,6 +1,6 @@
-#include <iostream>      
-#include <cmath>
+#include <iostream>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -43,6 +43,11 @@ double getDouble() {
 	return number;
 }
 
+/*
+ifstream fout(path)
+if fout.is_open()
+*/
+
 ForCalculate enterArray() {
 	cout << "Enter the size of array" << endl;
 	int size = getInt();
@@ -58,6 +63,48 @@ ForCalculate enterArray() {
 	return forCalc;
 }
 
+ForCalculate readFromFile() {
+	//ifstream file;
+	int size = 0;
+	cout << "Enter the path to file" << endl;
+	string path;
+	cin >> path;
+	ForCalculate forCalc;
+
+	ifstream ifs("C:\\Users\\alex\\Desktop\\d.txt");
+	//ifs.open(path, std::ifstream::in);
+	//file.open(path);
+	/*
+	if (file.is_open()) {
+		file >> size;
+		
+		double *array = new double[size];
+		for (int i = 0; i < size; i++) {
+			file >> array[i];
+		}
+
+		for (int i = 0; i < size; i++) {
+			cout << array[i] << " ";
+		}
+		forCalc = { size, array };
+		file.close();
+	}
+	else {
+		cout << "Incorrect path! Try again" << endl;
+	}
+
+	*/
+
+	while (!ifs.eof()) {
+		size++;
+	}
+	ifs.close();
+	cout << size;
+	double arr[2] = { 1, 2 };
+	return forCalc = { 0, arr };
+	
+
+}
 
 
 Answer findSum(ForCalculate forCalc) {
@@ -110,7 +157,11 @@ void secondInput() {
 
 		switch (option) {
 
-		case 1:
+		case 1: {
+			ForCalculate forCalc = readFromFile();
+			Answer answer = findSum(forCalc);
+			showResult(answer);
+		}
 		case 2: {
 			ForCalculate forCalc = enterArray();
 			Answer answer = findSum(forCalc);
