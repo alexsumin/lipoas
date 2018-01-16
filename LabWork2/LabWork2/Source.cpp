@@ -224,20 +224,20 @@ void saveToFile(Answer answer) {
 
 bool showSaveDialog(Answer answer) {
 	int choice = 0;
-	bool res = false;
+	bool result = false;
 	cout << "Would you like to save results?" << endl;
 	cout << "[1] Yes" << endl;
 	cout << "[2] No" << endl;
 	choice = getValue<int>();
 	switch (choice) {
 	case(SAVE_RESULT): {
-		res = true;
+		result = true;
 		break;
 	}
 	default:
 		break;
 	}
-	return res;
+	return result;
 }
 
 
