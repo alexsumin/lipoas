@@ -30,7 +30,7 @@ string getFilename(string number, char * &buffer) {
 		cin >> filename;
 		bool isOpened = false;
 		if (!is_regular_file(filename)) {
-			cout << "File doesn't exist. Try again. " << endl;
+			cout << "File doesn't exist or file is empty. Try again. " << endl;
 			isOpened = false;
 			continue;
 		}
@@ -50,9 +50,14 @@ void calculate() {
 	int type;
 	char *buffer1 = 0;
 	char *buffer2 = 0;
-	int m = 0;
 	filename1 = getFilename("first", buffer1);
-	filename1 = getFilename("second", buffer2);
+	filename2 = getFilename("second", buffer2);
+
+	while (filename1 == filename2) {
+		cout << "Files are same!" << endl;
+		filename2 = getFilename("second", buffer2);
+	} 
+		
 
 	int len1 = strlen(buffer1);
 	int len2 = strlen(buffer2);
@@ -89,10 +94,14 @@ void calculate() {
 		cout << "Enter a filename: ";
 		cin >> fileToSave;
 		ifstream finCheck(fileToSave);
-		if (finCheck.is_open()) {
-			cout << "File already exists. Press 1 to override, press any number to cancel" << endl;
+		if (!is_regular_file(fileToSave) | finCheck.is_open()) {
+			cout << "Incorrect name or file already exists. Press 1 to override, press any number to cancel" << endl;
 			rewrite = GetInt();
 		}
+		/*if (finCheck.is_open()) {
+			cout << "File already exists. Press 1 to override, press any number to cancel" << endl;
+			rewrite = GetInt();
+		}*/
 		finCheck.close();
 		if (rewrite == OVERRIDE_FILE) {
 			ofstream fin(fileToSave);
@@ -109,7 +118,7 @@ void calculate() {
 				fin << "Starting position of a substring of " << filename2 << " is " << endl;
 				fin << (indexOfSecondFile) << endl;
 				fin.close();
-				cout << "\n File created! " << endl;
+				cout << "\nFile created! " << endl;
 			}
 			else {
 				cout << "\nFile '" << fileToSave << "' can't be created!\n";
