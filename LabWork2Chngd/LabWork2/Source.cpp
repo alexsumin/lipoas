@@ -1,8 +1,11 @@
 #include <iostream> 
 #include <fstream>
 #include <string>
-using namespace std;
+#include <experimental\filesystem>
 using namespace std::experimental::filesystem;
+using namespace std;
+
+
 
 enum menuItem { START = 1, ENTER_THE_ARRAY = 1, READ_FROM_FILE = 2, SAVE_RESULT = 1, BACK = 3, QUIT = 2};
 
@@ -176,6 +179,11 @@ ArrayWithSize readFromFile() {
 		cout << "Enter path to the file: " << endl;
 		cin >> path;
 		file.open(path);
+		if (!is_regular_file(path)) {
+			cout << "Wrong filename!" << endl;
+			file.close();
+			continue;
+		}
 		if (!file.is_open()) {
 			cout << "File doesn't exist!" << endl;
 		}
@@ -199,12 +207,13 @@ ArrayWithSize readFromFile() {
 	}
 
 	file.close();
-	for (int i = 0; i < forCalc.size; i++) {
+	for (size_t i = 0; i < forCalc.size; i++) {
 		cout << forCalc.array[i] << " ";
 	}
 	cout << endl;
 	return forCalc;
 }
+
 
 
 
@@ -216,14 +225,14 @@ void saveToFile(ArrayWithSize answer) {
 		cin >> path;
 		ifstream fout(path);
 		if (fout.is_open()) {
-			cout << "\nFile already exists!\n";
+			cout << "\nWrong filename of file already exists!\n";
 			fout.close();
 		}
 		else {
 			ofstream fout(path);
 			if (fout.is_open()) {
 				fout << answer.size << " ";
-				for (int i = 0; i < answer.size; i++) {
+				for (size_t i = 0; i < answer.size; i++) {
 					fout << answer.array[i] << " ";
 				}
 				fout.close();
