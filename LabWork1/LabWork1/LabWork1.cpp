@@ -58,6 +58,23 @@ Answer binSearch(Parabola parabola, Interval interval, double epsilon) {
 }
 
 
+template <typename T >
+T getValue() {
+	T number;
+	do {
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cin >> number;
+		if (cin.fail())
+		{
+			cout << "Please enter a valid double value" << endl;
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		}
+	} while (cin.fail());
+	return number;
+	
+}
+
 double getDouble() {
 	double number;
 	do {
@@ -168,12 +185,13 @@ int main() {
 	hello();
 	
 	do {
-		cin.clear();
+		//cin.clear();
 		cout << "Choose an option: " << endl;
 		cout << "1. Start" << endl;
 		cout << "2. Exit" << endl;
 
-		cin >> option;
+		//cin >> option;
+		option = getValue<int>();
 
 		switch (option) {
 
