@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 using namespace std;
+using namespace std::experimental::filesystem;
 
 enum menuItem { START = 1, ENTER_THE_ARRAY = 1, READ_FROM_FILE = 2, SAVE_RESULT = 1, BACK = 3, QUIT = 2};
 
@@ -54,7 +55,7 @@ ArrayWithSize solveTask(ArrayWithSize forCalc) {
 	size_t curIndex = 0;
 	bool isFound = false;
 
-	for (int i = 0; i < size; i++) {
+	for (size_t i = 0; i < size; i++) {
 		isFound = false;
 		for (size_t j = 0; j < curIndex; j++) {
 			if (tempArray[j] == array[i]) {
@@ -70,6 +71,7 @@ ArrayWithSize solveTask(ArrayWithSize forCalc) {
 
 	for (size_t i = 0; i < curIndex; i++)
 		finalArray[i] = tempArray[i];
+	delete[] tempArray;
 
 	ArrayWithSize answer;
 	answer.array = finalArray;
@@ -109,7 +111,7 @@ void runUnitTests() {
 
 void showResult(ArrayWithSize answer) {
 	cout << "Array after removing:" << endl;
-	for (int i = 0; i < answer.size; i++) {
+	for (size_t i = 0; i < answer.size; i++) {
 		cout << answer.array[i] << " ";
 	}
 	cout << endl;
@@ -159,7 +161,7 @@ ArrayWithSize enterArray() {
 
 	cout << "Enter elements of array" << endl;
 
-	for (int i = 0; i < size; i++) {
+	for (size_t i = 0; i < size; i++) {
 		cout << i + 1 << ". ";
 		forCalc.array[i] = getValue<int>();
 	}
@@ -170,22 +172,24 @@ ArrayWithSize readFromFile() {
 	ifstream file;
 	string path;
 	int size = 0;
-	cout << "Enter path to the file" << endl;
-	cin >> path;
-	file.open(path);
+	do {
+		cout << "Enter path to the file: " << endl;
+		cin >> path;
+		file.open(path);
+		if (!file.is_open()) {
+			cout << "File doesn't exist!" << endl;
+		}
+	} while (!file.is_open());
 
-	if (!file.is_open()) {
-		throw "File doesn't exist!";
-	}
 	int num;
-	file >> num;
+	file >> size;
 	if (file.fail()) {
 		file.close();
 		throw "Something's wrong!";
 	}
-	ArrayWithSize forCalc(num);
+	ArrayWithSize forCalc(size);
 	size_t count = 0;
-	while (!file.eof()) {	
+	while (count < size) {
 		file >> num;
 		if (file.fail()) {
 			file.close();
@@ -193,6 +197,7 @@ ArrayWithSize readFromFile() {
 		}
 		forCalc.array[count++] = num;
 	}
+
 	file.close();
 	for (int i = 0; i < forCalc.size; i++) {
 		cout << forCalc.array[i] << " ";
@@ -200,6 +205,8 @@ ArrayWithSize readFromFile() {
 	cout << endl;
 	return forCalc;
 }
+
+
 
 void saveToFile(ArrayWithSize answer) {
 	string path;
@@ -215,6 +222,7 @@ void saveToFile(ArrayWithSize answer) {
 		else {
 			ofstream fout(path);
 			if (fout.is_open()) {
+				fout << answer.size << " ";
 				for (int i = 0; i < answer.size; i++) {
 					fout << answer.array[i] << " ";
 				}
@@ -230,7 +238,7 @@ void saveToFile(ArrayWithSize answer) {
 bool showSaveDialog() {
 	int choice = 0;
 	bool result = false;
-	cout << "Would you like to save results?" << endl;
+	cout << "Would you like to save that?" << endl;
 	cout << "[1] Yes" << endl;
 	cout << "[2] No" << endl;
 	choice = getValue<int>();
@@ -251,7 +259,6 @@ void start() {
 	ifstream file;
 	bool isRead = false;
 	ArrayWithSize forCalc;
-
 	do {
 		cout << endl;
 		displayStartMenu();
@@ -260,20 +267,25 @@ void start() {
 		case ENTER_THE_ARRAY: {		
 			forCalc = enterArray();
 			isRead = true;
+			if (showSaveDialog())
+				saveToFile(forCalc);
 			break;
 		}
 		case READ_FROM_FILE: {
-			try {
-				forCalc = readFromFile();
-				isRead = true;
-			}
-			catch (char* msg) {
-				cout << msg << endl;
-				return;
+			while (!isRead) {
+				try {
+					forCalc = readFromFile();
+					isRead = true;
+				}
+				catch (char* msg) {
+					cout << msg << endl;
+					return;
+				}
 			}
 			break;
 		}
 		case BACK:
+			isRead = false;
 			break;
 		default:
 			cout << "Incorrect choice!" << endl;
@@ -283,11 +295,12 @@ void start() {
 			ArrayWithSize answer = solveTask(forCalc);
 			cout << "done!" << endl;
 			showResult(answer);
-			if (showSaveDialog()) {
+			if (showSaveDialog()) 
 				saveToFile(answer);
-			}
+			isRead = false;
 		}
 	} while (choice != BACK);
+	
 	
 }
 
@@ -299,7 +312,6 @@ int main() {
 		showMainMenu();
 		choice = getValue<int>();
 		switch (choice) {
-
 		case START:
 			start();
 			break;
