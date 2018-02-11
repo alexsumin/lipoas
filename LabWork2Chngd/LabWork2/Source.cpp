@@ -7,7 +7,7 @@ using namespace std;
 
 
 
-enum menuItem { START = 1, ENTER_THE_ARRAY = 1, READ_FROM_FILE = 2, SAVE_RESULT = 1, BACK = 3, QUIT = 2};
+enum menuItem { START = 1, OVERRIDE_FILE = 1, ENTER_THE_ARRAY = 1, READ_FROM_FILE = 2, SAVE_RESULT = 1, BACK = 3, QUIT = 2 };
 
 struct ArrayWithSize {
 	int *array;
@@ -220,15 +220,21 @@ ArrayWithSize readFromFile() {
 void saveToFile(ArrayWithSize answer) {
 	string path;
 	bool isWrotten = false;
+	int rewrite = OVERRIDE_FILE;
 	do {
 		cout << "Enter a path: " << endl;
 		cin >> path;
+		if (!is_regular_file(path)) {
+			cout << "Incorrect name!" << endl;
+			continue;
+		}
 		ifstream fout(path);
 		if (fout.is_open()) {
-			cout << "\nWrong filename of file already exists!\n";
+			cout << "\nFile already exists! Press 1 to override, press any key number to cancel\n";
 			fout.close();
+			rewrite = getValue<int>();
 		}
-		else {
+		if (rewrite == OVERRIDE_FILE) {
 			ofstream fout(path);
 			if (fout.is_open()) {
 				fout << answer.size << " ";
@@ -239,10 +245,37 @@ void saveToFile(ArrayWithSize answer) {
 				isWrotten = true;
 				cout << "Succesfull!" << endl;
 			}
-			else cout << "\nIncorrect path! Try again\n";
+			//else cout << "\nIncorrect path! Try again\n";
 		}
 	} while (!isWrotten);
 }
+
+//void saveToFile(ArrayWithSize answer) {
+//	string path;
+//	bool isWrotten = false;
+//	do {
+//		cout << "Enter a path: " << endl;
+//		cin >> path;
+//		ifstream fout(path);
+//		if (fout.is_open()) {
+//			cout << "\nWrong filename of file already exists!\n";
+//			fout.close();
+//		}
+//		else {
+//			ofstream fout(path);
+//			if (fout.is_open()) {
+//				fout << answer.size << " ";
+//				for (size_t i = 0; i < answer.size; i++) {
+//					fout << answer.array[i] << " ";
+//				}
+//				fout.close();
+//				isWrotten = true;
+//				cout << "Succesfull!" << endl;
+//			}
+//			else cout << "\nIncorrect path! Try again\n";
+//		}
+//	} while (!isWrotten);
+//}
 
 bool showSaveDialog() {
 	int choice = 0;
