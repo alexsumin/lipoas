@@ -5,10 +5,10 @@
 using namespace std::experimental::filesystem;
 using namespace std;
 
-
-
 enum menuItem { START = 1, OVERRIDE_FILE = 1, ENTER_THE_ARRAY = 1, READ_FROM_FILE = 2, SAVE_RESULT = 1, BACK = 3, QUIT = 2 };
 
+static string SYSTEM_WORDS[] = { "con", "prn", "aux", "nul", "com1", "com2", "com3", "com4", "com5", "com5",
+"com6", "com7", "com9", "lpt1", "lpt2", "lpt3", "lpt4", "lpt5", "lpt6", "lpt7", "lpt8", "lpt9" };
 struct ArrayWithSize {
 	int *array;
 	int size = 0;
@@ -80,7 +80,6 @@ ArrayWithSize solveTask(ArrayWithSize forCalc) {
 	answer.array = finalArray;
 	answer.size = curIndex;
 	
-
 	return answer;
 }
 
@@ -110,6 +109,15 @@ void runUnitTests() {
 	unitTest(testData4, expectedTestData4);
 	unitTest(testData5, expectedTestData5);
 	cout << endl;
+}
+
+bool isSystemWord(string forCheck) {
+	for (auto str : SYSTEM_WORDS) {
+		if (forCheck == str) {
+			return true;
+		}
+	}
+	return false;
 }
 
 void showResult(ArrayWithSize answer) {
@@ -214,9 +222,6 @@ ArrayWithSize readFromFile() {
 	return forCalc;
 }
 
-
-
-
 void saveToFile(ArrayWithSize answer) {
 	string path;
 	bool isWrotten = false;
@@ -224,7 +229,7 @@ void saveToFile(ArrayWithSize answer) {
 	do {
 		cout << "Enter a path: " << endl;
 		cin >> path;
-		if (!is_regular_file(path)) {
+		if (isSystemWord(path)) {
 			cout << "Incorrect name!" << endl;
 			continue;
 		}
@@ -245,37 +250,9 @@ void saveToFile(ArrayWithSize answer) {
 				isWrotten = true;
 				cout << "Succesfull!" << endl;
 			}
-			//else cout << "\nIncorrect path! Try again\n";
 		}
 	} while (!isWrotten);
 }
-
-//void saveToFile(ArrayWithSize answer) {
-//	string path;
-//	bool isWrotten = false;
-//	do {
-//		cout << "Enter a path: " << endl;
-//		cin >> path;
-//		ifstream fout(path);
-//		if (fout.is_open()) {
-//			cout << "\nWrong filename of file already exists!\n";
-//			fout.close();
-//		}
-//		else {
-//			ofstream fout(path);
-//			if (fout.is_open()) {
-//				fout << answer.size << " ";
-//				for (size_t i = 0; i < answer.size; i++) {
-//					fout << answer.array[i] << " ";
-//				}
-//				fout.close();
-//				isWrotten = true;
-//				cout << "Succesfull!" << endl;
-//			}
-//			else cout << "\nIncorrect path! Try again\n";
-//		}
-//	} while (!isWrotten);
-//}
 
 bool showSaveDialog() {
 	int choice = 0;
