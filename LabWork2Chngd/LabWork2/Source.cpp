@@ -11,51 +11,53 @@ static string SYSTEM_WORDS[] = { "con", "prn", "aux", "nul", "com1", "com2", "co
 "com6", "com7", "com9", "lpt1", "lpt2", "lpt3", "lpt4", "lpt5", "lpt6", "lpt7", "lpt8", "lpt9" };
 struct ArrayWithSize {
 	int *array;
-	int size = 0;
+	int size;
 	ArrayWithSize() {
-	}
-	ArrayWithSize(int s) {
-		size = s;
-		array = new int[s];
 	}
 	ArrayWithSize(int *arr, int s) {
 		array = arr;
 		size = s;
 	}
+public:
+	~ArrayWithSize() {
+		if (array)
+			delete[] array;
+	}
 };
 
-static const int SIZE_OF_TESTARRAYS = 8;
+//static const int SIZE_OF_TESTARRAYS = 8;
+//
+//static int testArray1[] = { 4, 3, 5, 3, 2, 1, 8, 7 };
+//static int testArray2[] = { 4, 42, 15, 31, 0, 1, 8, 7 };
+//static int testArray3[] = { 4, 3, 3, 3, 2, 1, 8, 7 };
+//static int testArray4[] = { 4, 4, 4, 4, 1, 4, 4, 4 };
+//static int testArray5[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+//
+//static ArrayWithSize testData1 = { testArray1, 8 };
+//static ArrayWithSize testData2 = { testArray2, 8 };
+//static ArrayWithSize testData3 = { testArray3, 8 };
+//static ArrayWithSize testData4 = { testArray4, 8 };
+//static ArrayWithSize testData5 = { testArray5, 8 };
+//
+//static int arrayFromAnswer1[] = { 4, 3, 5, 2, 1, 8, 7 };
+//static int arrayFromAnswer2[] = { 4, 42, 15, 31, 0, 1, 8, 7 };
+//static int arrayFromAnswer3[] = { 4, 3, 2, 1, 8, 7 };
+//static int arrayFromAnswer4[] = { 4, 1 };
+//static int arrayFromAnswer5[] = { 0 };
+//
+//static ArrayWithSize expectedTestData1 = { arrayFromAnswer1, 7 };
+//static ArrayWithSize expectedTestData2 = { arrayFromAnswer2, 8 };
+//static ArrayWithSize expectedTestData3 = { arrayFromAnswer3, 6 };
+//static ArrayWithSize expectedTestData4 = { arrayFromAnswer4, 2 };
+//static ArrayWithSize expectedTestData5 = { arrayFromAnswer5, 1 };
 
-static int testArray1[] = { 4, 3, 5, 3, 2, 1, 8, 7 };
-static int testArray2[] = { 4, 42, 15, 31, 0, 1, 8, 7 };
-static int testArray3[] = { 4, 3, 3, 3, 2, 1, 8, 7 };
-static int testArray4[] = { 4, 4, 4, 4, 1, 4, 4, 4 };
-static int testArray5[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-
-static ArrayWithSize testData1 = { testArray1, 8 };
-static ArrayWithSize testData2 = { testArray2, 8 };
-static ArrayWithSize testData3 = { testArray3, 8 };
-static ArrayWithSize testData4 = { testArray4, 8 };
-static ArrayWithSize testData5 = { testArray5, 8 };
-
-static int arrayFromAnswer1[] = { 4, 3, 5, 2, 1, 8, 7 };
-static int arrayFromAnswer2[] = { 4, 42, 15, 31, 0, 1, 8, 7 };
-static int arrayFromAnswer3[] = { 4, 3, 2, 1, 8, 7 };
-static int arrayFromAnswer4[] = { 4, 1 };
-static int arrayFromAnswer5[] = { 0 };
-
-static ArrayWithSize expectedTestData1 = { arrayFromAnswer1, 7 };
-static ArrayWithSize expectedTestData2 = { arrayFromAnswer2, 8 };
-static ArrayWithSize expectedTestData3 = { arrayFromAnswer3, 6 };
-static ArrayWithSize expectedTestData4 = { arrayFromAnswer4, 2 };
-static ArrayWithSize expectedTestData5 = { arrayFromAnswer5, 1 };
-
-ArrayWithSize solveTask(ArrayWithSize forCalc) {
-	int size = forCalc.size;
-	int *array = forCalc.array;
+ 
+ArrayWithSize* solveTask(ArrayWithSize * forCalc) {
+	int size = forCalc->size;
+	int *array = forCalc->array;
 	int *tempArray = new int[size];
 
-	size_t curIndex = 0;
+	int curIndex = 0;
 	bool isFound = false;
 
 	for (size_t i = 0; i < size; i++) {
@@ -76,40 +78,43 @@ ArrayWithSize solveTask(ArrayWithSize forCalc) {
 		finalArray[i] = tempArray[i];
 	delete[] tempArray;
 
-	ArrayWithSize answer;
-	answer.array = finalArray;
-	answer.size = curIndex;
+	ArrayWithSize *answer = new ArrayWithSize;
+	answer->array = finalArray; 
+	answer->size = curIndex;
+
+	/*answer.array = finalArray;
+	answer.size = curIndex;*/
 	
 	return answer;
 }
 
-void unitTest(ArrayWithSize forCalc, ArrayWithSize expected) {
-	ArrayWithSize calculated = solveTask(forCalc);
-	if (calculated.size != expected.size) {
-		cout << "Test didn't pass!" << endl;
-		return;
-	}
-	bool isPass = true;
-	for (size_t i = 0; i < calculated.size; i++) {
-		if (calculated.array[i] != expected.array[i])
-			isPass = false;
-	}
-	if (isPass) {
-		cout << "Test passed!" << endl;
-	}
-	else {
-		cout << "Test didn't pass!" << endl;
-	}
-}
-
-void runUnitTests() {
-	unitTest(testData1, expectedTestData1);
-	unitTest(testData2, expectedTestData2);
-	unitTest(testData3, expectedTestData3);
-	unitTest(testData4, expectedTestData4);
-	unitTest(testData5, expectedTestData5);
-	cout << endl;
-}
+//void unitTest(ArrayWithSize forCalc, ArrayWithSize expected) {
+//	ArrayWithSize calculated = solveTask(forCalc);
+//	if (calculated.size != expected.size) {
+//		cout << "Test didn't pass!" << endl;
+//		return;
+//	}
+//	bool isPass = true;
+//	for (size_t i = 0; i < calculated.size; i++) {
+//		if (calculated.array[i] != expected.array[i])
+//			isPass = false;
+//	}
+//	if (isPass) {
+//		cout << "Test passed!" << endl;
+//	}
+//	else {
+//		cout << "Test didn't pass!" << endl;
+//	}
+//}
+//
+//void runUnitTests() {
+//	unitTest(testData1, expectedTestData1);
+//	unitTest(testData2, expectedTestData2);
+//	unitTest(testData3, expectedTestData3);
+//	unitTest(testData4, expectedTestData4);
+//	unitTest(testData5, expectedTestData5);
+//	cout << endl;
+//}
 
 bool isSystemWord(string forCheck) {
 	for (auto str : SYSTEM_WORDS) {
@@ -120,10 +125,10 @@ bool isSystemWord(string forCheck) {
 	return false;
 }
 
-void showResult(ArrayWithSize answer) {
+void showResult(ArrayWithSize * answer) {
 	cout << "Array after removing:" << endl;
-	for (size_t i = 0; i < answer.size; i++) {
-		cout << answer.array[i] << " ";
+	for (size_t i = 0; i < answer->size; i++) {
+		cout << answer->array[i] << " ";
 	}
 	cout << endl;
 }
@@ -162,24 +167,28 @@ T getValue() {
 	return number;
 }
 
-ArrayWithSize enterArray() {
+ArrayWithSize* enterArray() {
 	int size;
 	cout << "Enter size of array (more than 0)" << endl;
 	do {
 		size = getValue<int>();
 	} while (size <= 0);
-	ArrayWithSize forCalc(size);
-
+	
+	
 	cout << "Enter elements of array" << endl;
-
+	int *array = new int[size];
 	for (size_t i = 0; i < size; i++) {
 		cout << i + 1 << ". ";
-		forCalc.array[i] = getValue<int>();
+		array[i] = getValue<int>();
 	}
+	ArrayWithSize *forCalc = new ArrayWithSize;
+	forCalc->size = size;
+	forCalc->array = array;
+	
 	return forCalc;
 }
 
-ArrayWithSize readFromFile() {
+ArrayWithSize* readFromFile() {
 	ifstream file;
 	string path;
 	int size = 0;
@@ -203,7 +212,8 @@ ArrayWithSize readFromFile() {
 		file.close();
 		throw "Something's wrong!";
 	}
-	ArrayWithSize forCalc(size);
+		
+	int *array = new int[size];
 	size_t count = 0;
 	while (count < size) {
 		file >> num;
@@ -211,18 +221,21 @@ ArrayWithSize readFromFile() {
 			file.close();
 			throw "Something's wrong!";
 		}
-		forCalc.array[count++] = num;
+		array[count++] = num;
 	}
+	ArrayWithSize *forCalc = new ArrayWithSize;
+	forCalc->array = array;
+	forCalc->size = size;
 
 	file.close();
-	for (size_t i = 0; i < forCalc.size; i++) {
-		cout << forCalc.array[i] << " ";
+	for (size_t i = 0; i < size; i++) {
+		cout << array[i] << " ";
 	}
 	cout << endl;
 	return forCalc;
 }
 
-void saveToFile(ArrayWithSize answer) {
+void saveToFile(ArrayWithSize * answer) {
 	string path;
 	bool isWrotten = false;
 	int rewrite = OVERRIDE_FILE;
@@ -242,9 +255,9 @@ void saveToFile(ArrayWithSize answer) {
 		if (rewrite == OVERRIDE_FILE) {
 			ofstream fout(path);
 			if (fout.is_open()) {
-				fout << answer.size << " ";
-				for (size_t i = 0; i < answer.size; i++) {
-					fout << answer.array[i] << " ";
+				fout << answer->size << " ";
+				for (size_t i = 0; i < answer->size; i++) {
+					fout << answer->array[i] << " ";
 				}
 				fout.close();
 				isWrotten = true;
@@ -277,7 +290,7 @@ void start() {
 	int choice = 0;
 	ifstream file;
 	bool isRead = false;
-	ArrayWithSize forCalc;
+	ArrayWithSize *forCalc = new ArrayWithSize;
 	do {
 		cout << endl;
 		displayStartMenu();
@@ -288,6 +301,7 @@ void start() {
 			isRead = true;
 			if (showSaveDialog())
 				saveToFile(forCalc);
+			
 			break;
 		}
 		case READ_FROM_FILE: {
@@ -311,22 +325,23 @@ void start() {
 			break;
 		}
 		if (isRead) {
-			ArrayWithSize answer = solveTask(forCalc);
+			ArrayWithSize *answer = new ArrayWithSize;
+			answer = solveTask(forCalc);
 			cout << "done!" << endl;
 			showResult(answer);
 			if (showSaveDialog()) 
 				saveToFile(answer);
 			isRead = false;
+			if (forCalc) delete forCalc;
+			if (answer) delete answer;
 		}
 	} while (choice != BACK);
-	
-	
 }
 
 int main() {
 	int choice = 0;
 	hello();
-	runUnitTests();
+	//runUnitTests();
 	do {
 		showMainMenu();
 		choice = getValue<int>();
