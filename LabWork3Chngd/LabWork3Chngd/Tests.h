@@ -6,4 +6,5 @@ extern CoutModified coutMod;
 
 using namespace std;
 void runUnitTests(); 
-void test(FilesForReading testFiles, char * expectedString);
+bool test(FilesForReading testFiles, char * expectedString);
+void initExpectedData();

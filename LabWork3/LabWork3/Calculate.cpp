@@ -10,11 +10,12 @@ int GetInt() {
 	while (cin.fail()) {
 		cin.clear();
 		cin.ignore(INT_MAX, '\n');
-		cout << "\n Enter a valid value!" << endl;
+		cout << "\nEnter a valid value!" << endl;
 		cin >> tmp;
 	}
 	return tmp;
 }
+
 size_t getCommonLength(char* str1, char* str2) {
 	size_t length = 0;
 	while (*str1 && *str1++ == *str2++) {
@@ -41,10 +42,11 @@ string getFilename(string number, char * &buffer) {
 	}
 	return filename;
 }
+
 void calculate() {
 	string filename1;
 	string filename2;
-	size_t currentLength;
+	size_t currentLength = 0;
 	size_t maxLenght = 0;
 	char* maxSubstring = 0;
 	int type;
@@ -63,10 +65,13 @@ void calculate() {
 	int len2 = strlen(buffer2);
 	int indexOfFirstFile;
 	int indexOfSecondFile;
-
+	ofstream fin("testttt.txt");
 	for (int i = 0; i < len1 - maxLenght; ++i) {
 		for (int j = 0; j < len2 - maxLenght; ++j) {
+			
+			fin << *buffer1 + i << "   " << *buffer2 + i << endl;
 			currentLength = getCommonLength(buffer1 + i, buffer2 + j);
+			fin << currentLength << " текущая длина" << endl;
 			if (currentLength > maxLenght) {
 				maxLenght = currentLength;
 				maxSubstring = buffer1 + i;
@@ -75,6 +80,7 @@ void calculate() {
 			}
 		}
 	}
+	fin.close();
 	cout << "Substring of files: " << endl;
 	for (int k = 0; k < maxLenght; ++k) {
 		cout << maxSubstring[k];
@@ -95,13 +101,9 @@ void calculate() {
 		cin >> fileToSave;
 		ifstream finCheck(fileToSave);
 		if (!is_regular_file(fileToSave) | finCheck.is_open()) {
-			cout << "Incorrect name or file already exists. Press 1 to override, press any number to cancel" << endl;
+			cout << "Incorrect name or a file already exists. Press 1 to try again, press any number to cancel" << endl;
 			rewrite = GetInt();
 		}
-		/*if (finCheck.is_open()) {
-			cout << "File already exists. Press 1 to override, press any number to cancel" << endl;
-			rewrite = GetInt();
-		}*/
 		finCheck.close();
 		if (rewrite == OVERRIDE_FILE) {
 			ofstream fin(fileToSave);

@@ -23,9 +23,10 @@ void showMainMenu() {
 }
 
 int main() {
-	system("mode con cols=80 lines=22");
+	//system("mode con cols=80 lines=22");
 	setlocale(LC_ALL, "Russian");
-	bool(*tests[])(void) = { test1, test2, test3, test4, test5 };
+	bool(*tests[])(void) = {test2};
+	//bool(*tests[])(void) = { test1, test2, test3, test4, test5 };
 	bool areAllTestsSuccessful = true;
 
 	for (int i = 0; i < sizeof(tests) / sizeof(tests[0]); i++)
