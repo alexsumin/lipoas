@@ -7,7 +7,7 @@ enum io { OVERRIDE_FILE = 1 };
 static string SYSTEM_WORDS[] = { "con", "prn", "aux", "nul", "com1", "com2", "com3", "com4", "com5", "com5", 
 							"com6", "com7", "com9", "lpt1", "lpt2", "lpt3", "lpt4", "lpt5", "lpt6", "lpt7", "lpt8", "lpt9" };
 
-void saveToFile(Answer answer) {
+void saveToFile(Answer * answer) {
 	string path;
 	bool isWrite = false;
 	size_t rewrite = OVERRIDE_FILE;
@@ -28,16 +28,16 @@ void saveToFile(Answer answer) {
 			ofstream fout(path);
 			if (fout.is_open()) {
 				fout << "Substring of files: " << endl;
-				for (size_t k = 0; k < answer.length; ++k) {
-					fout << answer.substring[k];
+				for (size_t k = 0; k < answer->length; ++k) {
+					fout << answer->substring[k];
 				}
 				fout << " " << endl;
 				fout << "Length of substring: " << endl;
-				fout << answer.length << endl;
-				fout << "Starting position of a substring of " << answer.files.firstFile << " is " << endl;
-				fout << answer.indexOfFirstFile << endl;
-				fout << "Starting position of a substring of " << answer.files.secondFile << " is " << endl;
-				fout << answer.indexOfSecondFile << endl;
+				fout << answer->length << endl;
+				fout << "Starting position of a substring of " << answer->files.firstFile << " is " << endl;
+				fout << answer->indexOfFirstFile << endl;
+				fout << "Starting position of a substring of " << answer->files.secondFile << " is " << endl;
+				fout << answer->indexOfSecondFile << endl;
 				fout.close();
 				isWrite = true;
 				coutMod << "\nFile created!" << endl;
@@ -50,10 +50,9 @@ void saveToFile(Answer answer) {
 }
 
 bool isSystemWord(string forCheck) {
-	for (auto str : SYSTEM_WORDS) { 
-		if (forCheck == str) {
+	for (auto str : SYSTEM_WORDS) {
+		if (forCheck == str)
 			return true;
-		}
 	}
 	return false;
 }

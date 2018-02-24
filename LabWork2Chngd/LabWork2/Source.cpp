@@ -384,7 +384,7 @@ int main() {
 			start();
 			break;
 		case QUIT:
-			cout << endl << "Goodbye!" ;
+			cout << "Goodbye!" ;
 			break;
 		default:
 			cout << "Incorrect choice!" << endl;

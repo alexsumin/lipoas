@@ -37,18 +37,18 @@ bool showSaveDialog() {
 	return result;
 }
 
-void showAnswer(Answer answer) {
+void showAnswer(Answer * answer) {
 	coutMod << "Substring of files: " << endl;
-	for (size_t i = 0; i < answer.length; i++) {
-		coutMod << answer.substring[i];
+	for (size_t i = 0; i < answer->length; i++) {
+		coutMod << answer->substring[i];
 	}
 	coutMod << " " << endl;
 	coutMod << "Length of substring: " << endl;
-	coutMod << answer.length << endl;
-	coutMod << "Starting position of a substring of " << answer.files.firstFile << " is " << endl;
-	coutMod << answer.indexOfFirstFile << endl;
-	coutMod << "Starting position of a substring of " << answer.files.secondFile << " is " << endl;
-	coutMod << answer.indexOfSecondFile << endl;
+	coutMod << answer->length << endl;
+	coutMod << "Starting position of a substring of " << answer->files.firstFile << " is " << endl;
+	coutMod << answer->indexOfFirstFile << endl;
+	coutMod << "Starting position of a substring of " << answer->files.secondFile << " is " << endl;
+	coutMod << answer->indexOfSecondFile << endl;
 }
 
 void solveTask() {
@@ -60,14 +60,15 @@ void solveTask() {
 		filename2 = getFilename("second");
 	}
 	FilesForReading filesForReading = { filename1, filename2 };
-	Answer answer = getSubstring(filesForReading);
+	Answer * answer = getSubstring(filesForReading);
 	showAnswer(answer);
 	if (showSaveDialog()) {
 		saveToFile(answer);
 	}
+	if (answer) delete answer;
 }
 
-Answer getSubstring(FilesForReading filesForReading) {
+Answer* getSubstring(FilesForReading filesForReading) {
 
 	char * buffer1 = getBuffer(filesForReading.firstFile);
 	char * buffer2 = getBuffer(filesForReading.secondFile);
@@ -76,7 +77,6 @@ Answer getSubstring(FilesForReading filesForReading) {
 	size_t length2 = strlen(buffer2);
 
 	size_t **LCSuff = new size_t*[length1 + 1];
-
 	for (size_t count = 0; count < length1 + 1; count++)
 		LCSuff[count] = new size_t[length2 + 1];
 	size_t result = 0;
@@ -114,8 +114,17 @@ Answer getSubstring(FilesForReading filesForReading) {
 	for (size_t i = 0; i < result; i++) {
 		lcs[i] = buffer1[index1 + i];
 	}
+	
+	for (size_t count = 0; count < length1 + 1; count++)
+		delete[] LCSuff[count];
+		
+	delete[] LCSuff;
 
-	Answer answer = { lcs, result, index1, index2, filesForReading };
-
+	Answer *answer = new Answer();
+	answer->substring = lcs;
+	answer->length = result;
+	answer->indexOfFirstFile = index1;
+	answer->indexOfSecondFile = index2;
+	answer->files = filesForReading;
 	return answer;
 }

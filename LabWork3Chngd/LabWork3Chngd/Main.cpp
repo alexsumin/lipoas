@@ -24,7 +24,7 @@ void showMainMenu() {
 }
 
 int main() {
-	system("mode con cols=80 lines=22");
+	//system("mode con cols=80 lines=22");
 	setlocale(LC_ALL, "Russian");
 	runUnitTests();
 	int choice = 0;

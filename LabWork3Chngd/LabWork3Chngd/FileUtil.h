@@ -8,7 +8,7 @@
 using namespace std;
 struct Answer;
 extern CoutModified coutMod;
-void saveToFile(Answer answer);
+void saveToFile(Answer *answer);
 string getFilename(string number);
 char * getBuffer(string filename);
 bool isSystemWord(string forCheck);

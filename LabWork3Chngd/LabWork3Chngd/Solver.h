@@ -20,9 +20,12 @@ struct Answer {
 	size_t indexOfFirstFile = 0;
 	size_t indexOfSecondFile = 0;
 	FilesForReading files;
+	~Answer(){
+		if (substring) delete[] substring;
+	}
 };
 
-void showAnswer(Answer answer);
-Answer getSubstring(FilesForReading filesForReading);
+void showAnswer(Answer *answer);
+Answer* getSubstring(FilesForReading filesForReading);
 void solveTask();
 int getUsersInput();
